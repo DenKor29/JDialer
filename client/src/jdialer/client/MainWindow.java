@@ -2,13 +2,12 @@ package jdialer.client;
 
 
 import jdialer.core.ConfigurationSettings;
+import jdialer.jtapi.makecall;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 
 public class MainWindow extends JFrame  {
@@ -24,14 +23,11 @@ public class MainWindow extends JFrame  {
     private JButton buttonstopServer;
     private JTextArea log;
 
+    private makecall call;
 
 
     private boolean Running = false;
 
-    private int port;
-    private int  timeoutacept;
-    private int httpport;
-    private int  httptimeoutacept;
     private int appserverstart;
     private static final int WIDTH = 350;
     private static final int HEIGHT = 95;
@@ -79,22 +75,16 @@ public class MainWindow extends JFrame  {
         setIconImage(getImage("icon"));
         setLocationRelativeTo(null);
 
-        ConfigurationSettings configurationSettings = new ConfigurationSettings("application.xml", "avaya");
+        ConfigurationSettings configurationSettings = new ConfigurationSettings("application.xml", "jtapi");
 
-         String dbname = configurationSettings.get("dbname");
-         String nametable = configurationSettings.get("tbname");
          String user = configurationSettings.get("user");
          String password = configurationSettings.get("password");
-         String url = "jdbc:mysql://"+ configurationSettings.get("dburl")+"/";
-         String urlParam = "?serverTimezone=GMT%2B3";
+         String server = ""+ configurationSettings.get("server")+"";
 
 
-         port = configurationSettings.getInt("appport",9100);
-         timeoutacept = configurationSettings.getInt("apptimeoutacept",30000);
-         httpport = configurationSettings.getInt("httpport",8000);
-         httptimeoutacept = configurationSettings.getInt("httptimeoutacept",30000);
          appserverstart = configurationSettings.getInt("appserverstart",1);
 
+         call = new makecall(server,user,password,0,"7352","7390");
 
 
         buttonstartServer.addActionListener(new ActionListener() {

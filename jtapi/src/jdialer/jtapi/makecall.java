@@ -34,24 +34,16 @@ public class makecall extends TraceWindow implements ProviderObserver
 	Condition	conditionInService = new Condition ();
 	Provider	provider;
 
-	public makecall ( String [] args ) {
+	public makecall ( String server, String  login, String password, int delay, String origin, String destination) {
 
 		super ( "makecall" + ": "+ new CiscoJtapiVersion());
 		try {
 
 			System.out.println ( "Initializing Jtapi" );
-			int curArg = 0;
-			String providerName = args[curArg++];
-			String login = args[curArg++];
-			String passwd = args[curArg++];
-			int actionDelayMillis = Integer.parseInt ( args[curArg++] );
-			String src = null;
-			String dest = null;
 
 			JtapiPeer peer = JtapiPeerFactory.getJtapiPeer ( null );
-			if ( curArg < args.length ) {
 
-				String providerString = providerName + ";login=" + login + ";passwd=" + passwd;
+				String providerString = server + ";login=" + login + ";passwd=" + password;
 				System.out.println ( "Opening " + providerString + "...\n" );
 				provider = peer.getProvider ( providerString );
 				provider.addObserver ( this );
@@ -59,26 +51,9 @@ public class makecall extends TraceWindow implements ProviderObserver
 
 				System.out.println ( "Constructing actors" );
 
-				for ( ; curArg < args.length; curArg++ ) {
-					if ( src == null ) {
-						src = args[curArg];
-					}
-					else {
-						dest = args[curArg];
-						Originator originator = new Originator ( provider.getAddress ( src ), dest, (Trace)this, actionDelayMillis );
-						actors.addElement ( originator );
-						actors.addElement (
-							new Receiver ( provider.getAddress ( dest ), (Trace)this, actionDelayMillis, originator )
-							);
-						src = null;
-						dest = null;
-					}
-				}
-				if ( src != null ) {
-					System.out.println ( "Skipping last originating address \"" + src + "\"; no destination specified" );
-				}
-
-			}
+				Originator originator = new Originator ( provider.getAddress ( origin ), destination, (Trace)this, delay);
+				actors.addElement ( originator );
+				actors.addElement (new Receiver ( provider.getAddress ( destination ), (Trace)this, delay, originator ));
 
 			Enumeration e = actors.elements ();
 			while ( e.hasMoreElements () ) {
@@ -106,14 +81,6 @@ public class makecall extends TraceWindow implements ProviderObserver
 		}
 	}
 
-	public static void main ( String [] args )
-	{
-		if ( args.length < 6 ) {
-			System.out.println ( "Usage: makecall <server> <login> <password> <delay> <origin> <destination> ..." );
-			System.exit ( 1 );
-		}
-		new makecall ( args );
-	}
 
 	public void providerChangedEvent ( ProvEv [] eventList ) {
 		if ( eventList != null ) {
