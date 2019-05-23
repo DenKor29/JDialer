@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="JDialer:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JDialer_jar</output-path>
+    <root id="archive" name="JDialer.jar">
+      <element id="module-output" name="JDialer" />
+      <element id="module-output" name="client" />
+      <element id="module-output" name="base" />
+      <element id="module-output" name="jtapi" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/jtapi.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/cryptojcommon.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/sslj.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/jtracing.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/updater.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/cryptojce.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/jcmFIPS.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
